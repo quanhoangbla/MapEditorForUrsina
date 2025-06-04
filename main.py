@@ -14,6 +14,8 @@ def toggle_vis(self:Entity):
         refresh_container()
     else:
         self.wireframe=not self.wireframe
+        if not self.wireframe:
+            self.clearRenderMode()
 Entity.toggle_vis=toggle_vis
 
 class DebugBehaviour():
@@ -134,7 +136,9 @@ Button('Add new Object', position=Vec3(-0.61267745, 0.39322376, -0.8950644), col
 Button('Toggle Delete Mode', position=Vec3(-0.61267745, 0.19322376, -0.8950644), color=color.white, on_click=toggleDelete, scale=(.5,.1), text_color=color.black, eternal=True)
 Button('Save', position=Vec3(-0.61267745, -0.19322376, -0.8950644), color=color.white, on_click=save, scale=(.5,.1), text_color=color.black, eternal=True)
 Button('Load', position=Vec3(-0.61267745, -0.30322376, -0.8950644), color=color.white, on_click=load, scale=(.5,.1), text_color=color.black, eternal=True)
-
+cs=Text('Current Selecting : ', origin=(0,0), eternal=True, position=Vec3(0.61267745,-.25,0))
+def update():
+    cs.text=f'Current Selecting : {selecting}'
 Entity(model=Grid(512,512), rotation_x=90, scale=512, color=color.white33, enabled=True, x=.5, z=.5, y=-.5, eternal=True)
 
 Sky(eternal=True)
