@@ -10,6 +10,7 @@ deleting=False
 selecting=None
 def toggle_vis(self:Entity):
     if deleting:
+        objects.remove(self)
         destroy(self)
         refresh_container()
     else:
@@ -90,6 +91,8 @@ def addnew():
 def toggleDelete():
     global deleting
     deleting = not deleting
+    tdm.color=color.green if deleting else color.red
+    tdm.highlight_color=tdm.color.tint(.2)
 
 def save():
     file=filedialog.asksaveasfile(defaultextension='.mes', filetypes=[("Map Editor Scene", "*.mes")],)
@@ -133,7 +136,9 @@ def load():
         refresh_container()
 Entity(model=Quad(.1, aspect=.7), color=color.black33, parent=camera.ui, scale=(.7,1), x=-0.6479293, eternal=True)
 Button('Add new Object', position=Vec3(-0.61267745, 0.39322376, -0.8950644), color=color.white, on_click=addnew, scale=(.5,.1), text_color=color.black, eternal=True)
-Button('Toggle Delete Mode', position=Vec3(-0.61267745, 0.19322376, -0.8950644), color=color.white, on_click=toggleDelete, scale=(.5,.1), text_color=color.black, eternal=True)
+tdm=Button('Toggle Delete Mode', position=Vec3(-0.61267745, 0.19322376, -0.8950644), on_click=toggleDelete, scale=(.5,.1), text_color=color.black, eternal=True)
+tdm.color=color.green if deleting else color.red
+tdm.highlight_color=tdm.color.tint(.2)
 Button('Save', position=Vec3(-0.61267745, -0.19322376, -0.8950644), color=color.white, on_click=save, scale=(.5,.1), text_color=color.black, eternal=True)
 Button('Load', position=Vec3(-0.61267745, -0.30322376, -0.8950644), color=color.white, on_click=load, scale=(.5,.1), text_color=color.black, eternal=True)
 cs=Text('Current Selecting : ', origin=(0,0), eternal=True, position=Vec3(0.61267745,-.25,0))
