@@ -1,6 +1,6 @@
 from ursina import *
 from ursina.mesh_importer import *
-from tkinter import simpledialog, messagebox
+from tkinter import simpledialog, messagebox, filedialog
 import importlib
 
 app=Ursina()
@@ -90,12 +90,12 @@ def toggleDelete():
     deleting = not deleting
 
 def save():
-    if messagebox.askyesno("Map Editor", "Do you want to save?"):
-        code=f"from ursina import *\n\n"
+    file=filedialog.asksaveasfile(defaultextension='.mes', filetypes=[("Map Editor Scene", "*.mes")],)
+    if file:
+        code=""
         for i in objects:
             code+=repr(i)+'\n'
-        with open('scene.py', 'w') as file:
-            file.write(code)
+        file.write(code)
 
 OBJECTS_PER_PAGE=5
 
@@ -118,13 +118,11 @@ def refresh_container():
     for i in range(current_page*OBJECTS_PER_PAGE, min((current_page+1)*OBJECTS_PER_PAGE,len(objects))):
         if objects[i]:container_o.append(Button(objects[i].name, position=Vec3(0.6342687, 0.40175405*(1-i/3), -0.90489095), on_click=objects[i].toggle_vis, color=color.white, scale=(.5,.1), text_color=color.black))
 def load():
-    if messagebox.askyesno("Map Editor", "Do you want to load?"):
+    file=filedialog.askopenfile(defaultextension='mes', filetypes=[("Map Editor Scene", "*.mes")])
+    if file:
         scene.clear()
         camera.overlay.color=color.clear
-        if 'scene' in sys.modules:
-            importlib.reload(sys.modules['scene'])
-        else:
-            importlib.import_module('scene')
+        exec(file.read())
         for i in scene.entities:
             i:Entity
             if not i.eternal:
